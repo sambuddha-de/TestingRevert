@@ -1,0 +1,26 @@
+<table border="1" width="100%">
+  <tr>
+    <td width="15%">
+      <h2>Edit Location</h2>
+    </td>
+    <td width="85%" align="right">
+    </td>
+  </tr>
+  <tr>
+    <td width="15%" valign="top"><%= render :partial => '/adminlinks' %></td>
+    <td width="85%" style="padding-left: 20px;">
+      <%= form_tag :action => 'update', :id => @location, method: :post %>
+
+      <table border="2">
+        <tr>
+          <td>Name</td>
+          <td><%= text_field_tag('updatedname', @location.name) %></td>
+        </tr>
+      </table>
+
+      <%= submit_tag 'Edit' %>
+
+      <%= link_to 'Back', {:action => 'list'} %>
+    </td>
+  </tr>
+</table>
