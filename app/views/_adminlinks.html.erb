@@ -1,0 +1,28 @@
+    <table class="admin_page" width="100%" cellpadding="5" cellspacing="0" border="1">
+
+      <tr>
+        <td><%= link_to 'Manage Teams', {:controller => 'team', :action => 'list'} %></td>
+      </tr>
+
+      <tr>
+        <td><%= link_to 'Manage Judges', {:controller => 'judge', :action => 'list'} %></td>
+      </tr>
+
+      <tr>
+        <td><%= link_to 'Manage Categories', {:controller => 'category', :action => 'list'} %></td>
+      </tr>
+
+      <tr>
+        <td><%= link_to 'Manage Ratings', {:controller => 'rating', :action => 'list'} %></td>
+      </tr>
+
+      <tr>
+        <td><%= link_to 'Manage Locations', {:controller => 'location', :action => 'list'} %></td>
+      </tr>
+
+      <tr>
+        <td><%= link_to 'Team Report', {:controller => 'rating', :action => 'report'} %></td>
+      </tr>
+
+    </table>
+
