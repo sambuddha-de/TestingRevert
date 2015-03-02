@@ -1,0 +1,472 @@
+<% if @team.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@team.errors.count, 'Error') %></h2>
+      <ul>
+        <% @team.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+
+<% else %>
+
+    <% if session[:insert] %>
+        <!-- <script>alert('Team rating successfully saved.')</script> -->
+        <% session[:insert] = false %>
+    <% end %>
+
+    <% if session[:modify] %>
+        <!-- <script>alert('Team rating successfully modified.')</script> -->
+        <% session[:modify] = false %>
+    <% end %>
+
+    <table border="0" width="100%" style="background-color: #313845;">
+      <tr>
+        <td width="10%">
+          <img src="/assets/logo.png" />
+        </td>
+        <td class="judge"><table border="0" cellpadding="0" cellspacing="0"><tr><td style="color:#FFFFFF!important">
+          <% if session[:user_id].nil? %>
+              <%= link_to 'Login as Judge', {:controller => 'home', :action => 'index'}, {:style=>'color:#FFFFFF;'} %>
+          <% else %>
+              <img src="/assets/Login_icon.png" style="padding-left: 15px;" alt="Logged in as judge <%= session[:user_name] %>" title="Logged in as judge <%= session[:user_name] %>" />
+          <% end %>
+        </td>
+        </tr>
+          <% if !session[:user_id].nil? %>
+              <tr>
+                <td>
+                  <%= link_to 'Logout', {:controller => 'home', :action => 'logout'}, {:style=>'color:#FFFFFF;'} %>
+                </td>
+
+              </tr>
+          <% end %>
+        </table>
+        </td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="15%" height="100%" valign="top" style="background-color: #ffffff;">
+          <%= render :partial => '/links', :object => @teams %>
+        </td>
+        <td width="85%" style="background-color: #ffffff; color:#313845; padding-left:20px;vertical-align: top;">
+          <h1><%= @team.name %></h1>
+          <hr />
+          <table border="0" cellpadding="5" cellspacing="0">
+            <tr>
+              <td>Members</td>
+              <td><%= @team.members %></td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td><%= @team.description %></td>
+            </tr>
+            <tr>
+              <td>Summary</td>
+              <td><%= @team.summary %></td>
+            </tr>
+            <tr>
+              <td>Location</td>
+              <td><%= @team.location %></td>
+            </tr>
+            <tr>
+				<% if @show_judge_report %>
+              <td>Current rating</td>
+              <td>
+                <% if @current_team_rating.blank? %>
+                    <p>Not Available</p>
+                <% else %>
+                    
+                        <table class="judge_t" border="1" cellspacing="0" cellpadding="5">
+                      <tr>
+                        <th>Judge</th>
+                        <% Category.all.each do |f| %>
+                            <% if !f.name.nil? %>
+                                <th><%= f.name %></th>
+                            <% end %>
+                        <% end %>
+                        <th>Overall</th>
+                      </tr>
+                    <% @ratings.each do |rec| %>
+                        <% if rec.tid.eql?(@team.id) && !rec.jid.nil? %>
+                            <tr>
+                              <% Judge.all.each do |judge| %>
+                                  <% if judge.id.eql?(rec.jid) %>
+                                      <td><%= judge.name %></td>
+                                  <% end %>
+                              <% end %>
+                              <% if !Category.first.nil? %>
+                                <td><%= rec.cat1 %></td>
+                              <% end %>
+                              <% if !Category.second.nil? %>
+                                <td><%= rec.cat2 %></td>
+                              <% end %>
+                              <% if !Category.third.nil? %>
+                                <td><%= rec.cat3 %></td>
+                              <% end %>
+                              <% if !Category.fourth.nil? %>
+                                <td><%= rec.cat4 %></td>
+                              <% end %>
+                              <% if !Category.fifth.nil? %>
+                                <td><%= rec.cat5 %></td>
+                              <% end %>
+                              <% if !Category.limit(1).offset(5).blank? %>
+                                  <td><%= rec.cat6 %></td>
+                              <% end %>
+                              <% if !Category.limit(1).offset(6).blank? %>
+                                  <td><%= rec.cat7 %></td>
+                              <% end %>
+                              <% if !Category.limit(1).offset(7).blank? %>
+                                  <td><%= rec.cat8 %></td>
+                              <% end %>
+                              <% if !Category.limit(1).offset(8).blank? %>
+                                  <td><%= rec.cat9 %></td>
+                              <% end %>
+                              <% if !Category.limit(1).offset(9).blank? %>
+                                  <td><%= rec.cat10 %></td>
+                              <% end %>
+                              <td><%= rec.overall %></td>
+                            </tr>
+                        <% end %>
+                      <% end %>
+                    </table>
+                <% end %>
+              </td>
+			  <% else %>
+                        <%= 'Judge(s) rating(s) unavailable' %>
+                    <% end %>
+            </tr>
+            <tr>
+                  <td>Average crowd rating</td>
+              <td>
+                <% if @current_team_rating.blank? %>
+                    <p>Not Available</p>
+                <% else %>
+                    <% if @show_crowd_report %>
+                        <table class="anonymous" border="1" cellpadding="5" cellspacing="0">
+                      <tr>
+                        <% Category.all.each do |f| %>
+                            <% if !f.name.nil? %>
+                                <th><%= f.name %></th>
+                            <% end %>
+                        <% end %>
+                        <th>Overall</th>
+                      </tr>
+                      <tr>
+                        <% if !Category.first.nil? %>
+                        <td>
+                          <% if !@cat1users.eql?(0) %>
+                            <%= number_with_precision(@cat1rating/@cat1users, precision: 2) %>
+                          <% else %>
+                            Not Available
+                          <% end %>
+                        </td>
+                        <% end %>
+
+                        <% if !Category.second.nil? %>
+                        <td>
+                          <% if !@cat2users.eql?(0) %>
+                            <%= number_with_precision(@cat2rating/@cat2users, precision: 2) %>
+                          <% else %>
+                              Not Available
+                          <% end %>
+                        </td>
+                        <% end %>
+
+                        <% if !Category.third.nil? %>
+                        <td>
+                          <% if !@cat3users.eql?(0) %>
+                            <%= number_with_precision(@cat3rating/@cat3users, precision: 2) %>
+                          <% else %>
+                              Not Available
+                          <% end %>
+                        </td>
+                        <% end %>
+
+                        <% if !Category.fourth.nil? %>
+                        <td>
+                          <% if !@cat4users.eql?(0) %>
+                            <%= number_with_precision(@cat4rating/@cat4users, precision: 2) %>
+                          <% else %>
+                              Not Available
+                          <% end %>
+                        </td>
+                        <% end %>
+
+                        <% if !Category.fifth.nil? %>
+                        <td>
+                          <% if !@cat5users.eql?(0) %>
+                            <%= number_with_precision(@cat5rating/@cat5users, precision: 2) %>
+                          <% else %>
+                              Not Available
+                          <% end %>
+                        </td>
+                        <% end %>
+
+                        <% if !Category.limit(1).offset(5).blank? %>
+                            <td>
+                              <% if !@cat6users.eql?(0) %>
+                                  <%= number_with_precision(@cat6rating/@cat6users, precision: 2) %>
+                              <% else %>
+                                  Not Available
+                              <% end %>
+                            </td>
+                        <% end %>
+
+                        <% if !Category.limit(1).offset(6).blank? %>
+                            <td>
+                              <% if !@cat7users.eql?(0) %>
+                                  <%= number_with_precision(@cat7rating/@cat7users, precision: 2) %>
+                              <% else %>
+                                  Not Available
+                              <% end %>
+                            </td>
+                        <% end %>
+
+                        <% if !Category.limit(1).offset(7).blank? %>
+                            <td>
+                              <% if !@cat8users.eql?(0) %>
+                                  <%= number_with_precision(@cat8rating/@cat8users, precision: 2) %>
+                              <% else %>
+                                  Not Available
+                              <% end %>
+                            </td>
+                        <% end %>
+
+                        <% if !Category.limit(1).offset(8).blank? %>
+                            <td>
+                              <% if !@cat9users.eql?(0) %>
+                                  <%= number_with_precision(@cat9rating/@cat9users, precision: 2) %>
+                              <% else %>
+                                  Not Available
+                              <% end %>
+                            </td>
+                        <% end %>
+
+                        <% if !Category.limit(1).offset(9).blank? %>
+                            <td>
+                              <% if !@cat10users.eql?(0) %>
+                                  <%= number_with_precision(@cat10rating/@cat10users, precision: 2) %>
+                              <% else %>
+                                  Not Available
+                              <% end %>
+                            </td>
+                        <% end %>
+
+                        <td>
+                          <% if !@overallusers.blank? && !@overallusers.eql?(0) %>
+                            <%= number_with_precision(@overallrating/@overallusers, precision: 2) %>
+                          <% else %>
+                              Not Available
+                          <% end %>
+                        </td>
+
+                      </tr>
+                    </table>
+                    <% else %>
+                        <p>Anonymous rating(s) unavailable</p>
+                    <% end %>
+                <% end %>
+
+              </td>
+            </tr>
+            <tr>
+              <td>Rate hack</td>
+              <td width="80%">
+
+                <%= form_for :team_rating, url:rating_create_path, :html => { :id => 'frmRatings' } do |f| %>
+
+                    <p>Rate (1-worst to 5-best)</p>
+
+                    <% if !Category.first.nil? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat1, :id => 'cat1' %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= Category.first.name %> </p>
+                        <span class="star-rating">
+                          <% (11..15).each do |i| %>
+                            <input name="star-rating-1" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.second.nil? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat2, :id => 'cat2'  %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= Category.second.name %> </p>
+                        <span class="star-rating">
+                          <% (21..25).each do |i| %>
+                            <input name="star-rating-2" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.third.nil? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat3, :id => 'cat3' %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= Category.third.name %> </p>
+                        <span class="star-rating">
+                          <% (31..35).each do |i| %>
+                            <input name="star-rating-3" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.fourth.nil? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat4, :id => 'cat4' %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= Category.fourth.name %> </p>
+                        <span class="star-rating">
+                          <% (41..45).each do |i| %>
+                            <input name="star-rating-4" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.fifth.nil? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat5, :id => 'cat5' %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><%= Category.fifth.name %></p>
+                        <span class="star-rating">
+                        <% (51..55).each do |i| %>
+                            <input name="star-rating-5" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.limit(1).offset(5).blank? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat6, :id => 'cat6' %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                          <% Category.limit(1).offset(5).each do |f| %>
+                                <%= f.name %>
+                          <% end %>
+                        </p>
+                        <span class="star-rating">
+                        <% (61..65).each do |i| %>
+                            <input name="star-rating-6" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.limit(1).offset(6).blank? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat7, :id => 'cat7' %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                          <% Category.limit(1).offset(6).each do |f| %>
+                              <%= f.name %>
+                          <% end %>
+                        </p>
+                        <span class="star-rating">
+                        <% (71..75).each do |i| %>
+                            <input name="star-rating-7" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.limit(1).offset(7).blank? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat8, :id => 'cat8' %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                          <% Category.limit(1).offset(7).each do |f| %>
+                              <%= f.name %>
+                          <% end %>
+                        </p>
+                        <span class="star-rating">
+                        <% (81..85).each do |i| %>
+                            <input name="star-rating-8" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.limit(1).offset(8).blank? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat9, :id => 'cat9' %></p>
+                            <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                              <% Category.limit(1).offset(8).each do |f| %>
+                                  <%= f.name %>
+                              <% end %>
+                            </p>
+                        <span class="star-rating">
+                        <% (91..95).each do |i| %>
+                            <input name="star-rating-9" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <% if !Category.limit(1).offset(9).blank? %>
+                        <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :cat10, :id => 'cat10' %></p>
+                        <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                          <% Category.limit(1).offset(9).each do |f| %>
+                              <%= f.name %>
+                          <% end %>
+                        </p>
+                        <span class="star-rating">
+                        <% (101..105).each do |i| %>
+                            <input name="star-rating-10" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                        </span>
+                    <% end %>
+
+                    <p style="width: 100%; height: 0px; margin: 0px;"><%= f.hidden_field :overall, :id => 'overall' %></p>
+                    <p style="width:50%;float:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Overall</p>
+                    <span class="star-rating">
+                      <% (111..115).each do |i| %>
+                            <input name="star-rating-11" type="radio" value="<%= i %>"><i></i>
+                          <% end %>
+                    </span>
+
+                    <p style="width: 100%; height: 0px; margin: 0px;"></p>
+                    <p style="width:20%; float: left;">
+                      <%= link_to('Clear Ratings', 'javascript:;', :id => :lnkClearRatings) %>
+                    </p>
+
+                    <% if !session[:user_id].nil? %>
+                        <p style="width: 20%; padding-top: 20px;">Comment</p><p style="width:78%; vertical-align: middle;"><%= f.text_area :comments, :id => "comments_area" %></p>
+                    <% end %>
+
+                    <p><%= f.hidden_field :tid, { :value => @team.id} %></p>
+
+                    <% session[:team_id] = @team.id %>
+
+                    <% if !session[:user_id].nil? %>
+                        <p><%= f.hidden_field :jid, { :value => session[:user_id]} %></p>
+                    <% end %>
+
+                    <p style="width: 30%;">
+                        <%= f.submit 'Submit Ratings' %>
+                    </p>
+
+                <% end %>
+
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">Comments</td>
+              <% if !session[:user_id].nil? %>
+              <td>
+                <table border="0px" cellspacing="0" cellpadding="10">
+                <% HackRate.all.each do |f| %>
+                  <% if f.tid.eql?(@team.id) && !f.jid.nil? %>
+                      <tr>
+                        <td width="18%" valign="top"><b><%= Judge.all.find(f.jid).name %>: </b></td> <td><%= f.comments %></td>
+                      </tr>
+                  <% end %>
+                <% end %>
+                </table>
+              </td>
+              <% else %>
+              <td>Not Available</td>
+              <% end %>
+            </tr>
+          </table>
+        </td>
+
+      </tr>
+
+
+    </table>
+
+
+
+    </table>
+
+<% end %>
+<table border="0" cellpadding="0" cellspacing="0" style="background-color: #313845; height: 30px; width:100%; padding:0px 10px; font-size: 11px;">
+  <tbody><tr>
+    <td>© 2014 Move, Inc. All rights reserved.</td>
+  </tr>
+  </tbody></table>
+
+

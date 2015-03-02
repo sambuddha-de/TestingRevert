@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hackathon</title>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+
+  <style>
+      #sortable { list-style-type: none; margin: 0; padding: 0; width: inherit; }
+      #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
+      #sortable li span { position: absolute; margin-left: -1.3em; }
+  </style>
+  <script>
+      $(function() {
+          $( "#sortable" ).sortable({
+              stop: function(event, ui) {
+                  $.ajax({
+                      type: "POST",
+                      url: '/location/update_position',
+                      dataType: "json",
+                      data: { location: ui.item[0].textContent,
+                          position: ui.item.index() + 1 },
+                      success: function () {
+                      },
+                      error: function () {
+                          alert("Error!");
+                      }
+                  });
+              }
+          });
+          $( "#sortable" ).disableSelection();
+      });
+  </script>
+
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

@@ -1,0 +1,115 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+.anonymous th {
+    background-color: #67ad45;
+    color:#FFFFFF;
+}
+
+.judge_t th {
+    background-color: #67ad45;
+    color:#FFFFFF;
+}
+
+.report th {
+    background-color: #67ad45;
+    color:#FFFFFF;
+}
+
+.report th .current {
+    padding-right: 20px;
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+
+.report th .asc {
+    background-image: url(/assets/up-arrow.gif);
+}
+
+.report th .desc {
+    background-image: url(/assets/down-arrow.gif);
+}
+
+.Empty
+{
+    background: url(/assets/Empty.gif) no-repeat right top;
+	    float: left;
+    margin-right: 5px;
+}
+
+.Empty:hover
+{
+    background: url(/assets/Fill.gif) no-repeat right top;
+}
+
+.Filled
+{
+    background: url(/assets/Fill.gif) no-repeat right top;
+}
+body{  margin: 0; padding: 0; border: 0; font-family: Arial; font-size: 14px;}
+#hkt_login {
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    width:30em;
+    height:18em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -15em; /*set to a negative number 1/2 of your width*/
+    background-color: none;
+}
+.logo{ width:40%; float:left; border-right:1px solid #FFFFFF; text-align:center; padding:50px 10px 50px 10px;}
+.login_details{width:45%; float:left; margin-left:20px; color:#FFFFFF; font-family:Verdana; font-size:12px;}
+p input{width:95%;}
+
+.main{ width:100%; border:1px solid #313845;}
+.header{width:100%; height:85px; background-color:#313845;}
+.header img{ padding:5px 15px;}
+.content{ width:100%; height:600px;}
+.left_cont{width:15%; background-color:#dfe1e7;}
+.left_cont table{ margin-top:30px;}
+.left_cont tr{ border-bottom:1px solid #FFFFFF; height:25px; background-color:#525b68; color:#FFFFFF; font-family:Arial; font-size:13px; padding:5px;}
+.left_cont tr td{ padding:8px 15px; font-weight:bold;}
+.selected{ background-color:#67ad45;}
+.judge{float:right; padding:10px 15px; }
+.judge_img{ vertical-align: middle; padding-left: 3px;}
+.right_cont{ width:80%;}
+.footer{width:100%; height:30px; background-color:#313845;}
+
+table tr td a:link{ font-size: 14px;  padding: 5px;  font-weight: bold;}
+
+.homepage_links { height:600px; min-height:400px !important; overflow-y:auto; float:left; width:100%; }
+
+hr{display: block;
+    -webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
+    -webkit-margin-start: auto;
+    -webkit-margin-end: auto;
+    border-style: inset;
+    border-width: 2px;
+    border-top-width: 2px;}
+
+.judge_t tr td{ text-align: center;}
+.anonymous tr td{ text-align: center;}
+
+textarea#comments_area {
+    width: 100%;
+    height: 50px;
+}
+.admin_page tr td{ background-color: #67ad45;}
+.admin_page a:link,.admin_page a:hover,.admin_page a:visited{ color: #FFFFFF !important;}
+
+
+
