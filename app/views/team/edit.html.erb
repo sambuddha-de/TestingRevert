@@ -1,0 +1,47 @@
+<table border="1" width="100%">
+  <tr>
+    <td width="15%">
+      <h2>Edit Team</h2>
+    </td>
+    <td width="85%" align="right">
+    </td>
+  </tr>
+  <tr>
+    <td width="15%" valign="top"><%= render :partial => '/adminlinks' %></td>
+    <td width="85%" style="padding-left: 20px;">
+        <%= form_tag :action => 'update', :id => @team, method: :post %>
+
+        <table border="2">
+          <tr>
+            <td>Name</td>
+            <td><%= text_field_tag('updatedname', @team.name) %></td>
+          </tr>
+
+          <tr>
+            <td>Members</td>
+            <td><%= text_area_tag('updatedmembers', @team.members) %></td>
+          </tr>
+
+          <tr>
+            <td>Location</td>
+            <td><%= select_tag('updatedlocation', options_from_collection_for_select(Location.all, "name", "name", @team.location)) %></td>
+          </tr>
+
+          <tr>
+            <td>Description</td>
+            <td><%= text_area_tag('updateddesc', @team.description) %></td>
+          </tr>
+
+          <tr>
+            <td>Summary</td>
+            <td><%= text_area_tag('updatedsummary', @team.summary) %></td>
+          </tr>
+
+        </table>
+
+        <%= submit_tag 'Edit' %>
+
+        <%= link_to 'Back', {:action => 'list'} %>
+    </td>
+  </tr>
+</table>
